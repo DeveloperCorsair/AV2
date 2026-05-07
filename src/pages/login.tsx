@@ -1,91 +1,120 @@
 import { useState } from "react";
-import { type Usuario, Field } from "../enums/enum";
+import { type Usuario } from "../enums/enum";
+import '../login.css';
+
+interface EyeIconProps { crossed: boolean; }
+
+const EyeIcon = ({ crossed }: EyeIconProps) =>
+  crossed ? (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
 
 interface LoginPageProps {
   onLogin: (usuario: Usuario) => void;
 }
 
 export function LoginPage({ onLogin }: LoginPageProps) {
-  const [usuario, setUsuario] = useState("");
-  const [senha, setSenha] = useState("");
-  const [err, setErr] = useState("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [username, setUsername]         = useState<string>("");
+  const [password, setPassword]         = useState<string>("");
+  const [err, setErr]                   = useState<string>("");
 
-  const handleLogin = () => {
-    if (usuario === "admin" && senha === "admin123") {
-      onLogin({ usuario, nome: "Carlos Mendonça", nivel: "ADMINISTRADOR" });
+  const handleLogin = (): void => {
+    if (!username || !password) { setErr("Preencha usuário e senha."); return; }
+    if (username === "admin" && password === "admin123") {
+      onLogin({ usuario: username, nome: "Rafael Andrade", nivel: "ADMINISTRADOR" });
     } else {
-      setErr("Usuário ou senha incorretos. Tente admin / admin123");
+      setErr("Usuário ou senha incorretos. Use admin / admin123");
     }
   };
 
+  const handleKey = (e: React.KeyboardEvent) => { if (e.key === "Enter") handleLogin(); };
+
   return (
-    <div style={{
-      height: "100vh", display: "flex", flexDirection: "column",
-      alignItems: "center", justifyContent: "center",
-      background: "#060c17",
-      backgroundImage: "radial-gradient(ellipse at 30% 60%, rgba(14,38,74,.4) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(3,25,50,.5) 0%, transparent 50%)",
-    }}>
-      {/* Logo */}
-      <div style={{ textAlign: "center", marginBottom: 40 }}>
-        <div style={{ fontFamily: "Rajdhani, sans-serif", fontSize: 36, fontWeight: 700, color: "#38bdf8", letterSpacing: 3 }}>
-          AEROCODE
+    <div className="ac-container">
+      {/* LEFT */}
+      <div className="ac-left">
+        <div className="ac-wave">
+          {/* Ancorado no canto inferior esquerdo e com curva bezier suave */}
+          <svg viewBox="0 0 600 800" preserveAspectRatio="xMinYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,0 L600,0 L600,800 L0,800 Z" fill="white" />
+            <path d="M0,200 C 200,300 350,500 450,800 L0,800 Z" fill="#2B7A91" />
+          </svg>
         </div>
-        <div style={{ fontSize: 11, color: "#1e3a5f", letterSpacing: 4, textTransform: "uppercase", marginTop: 4 }}>
-          Sistema de Gestão de Produção
-        </div>
-      </div>
-
-      {/* Card */}
-      <div style={{
-        background: "#0a1525", border: "1px solid #1a3050",
-        borderRadius: 14, padding: 36, width: 360, maxWidth: "92vw",
-      }}>
-        <div style={{ marginBottom: 22 }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: "#e2e8f0", marginBottom: 4 }}>Acesso ao Sistema</div>
-          <div style={{ fontSize: 12.5, color: "#2a4a6a" }}>Insira suas credenciais para continuar</div>
-        </div>
-
-        <Field label="Usuário">
-          <input
-            value={usuario}
-            onChange={e => { setUsuario(e.target.value); setErr(""); }}
-            placeholder="Usuário"
-            onKeyDown={e => e.key === "Enter" && handleLogin()}
-          />
-        </Field>
-        <Field label="Senha">
-          <input
-            type="password"
-            value={senha}
-            onChange={e => { setSenha(e.target.value); setErr(""); }}
-            placeholder="••••••••"
-            onKeyDown={e => e.key === "Enter" && handleLogin()}
-          />
-        </Field>
-
-        {err && (
-          <div style={{ background: "rgba(239,68,68,.08)", border: "1px solid rgba(239,68,68,.2)", borderRadius: 7, padding: "9px 12px", fontSize: 12.5, color: "#ef4444", marginBottom: 14 }}>
-            {err}
+        <div className="ac-logo">
+          {/* SVG com as cores alteradas para o azul da identidade visual */}
+          <svg width="72" height="72" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,42 L30,20 L36,30 L20,40 Z" fill="#1d5c72" opacity="0.9" />
+            <path d="M10,42 L30,20 L38,36 L18,48 Z" fill="#1d5c72" opacity="0.6" />
+            <path d="M36,16 L52,56 L45,56 L40,42 L35,56 L28,56 Z" fill="#1d5c72" />
+            <path d="M32,46 L48,46 L46,40 L34,40 Z" fill="#2B7A91" />
+            <polyline points="14,60 22,60 26,50 30,68 34,54 38,60 66,60" stroke="#1d5c72" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <div className="ac-logo-text">
+            AERO<span>CODE</span>
           </div>
-        )}
-
-        <button
-          className="btn-primary"
-          style={{ width: "100%", justifyContent: "center", padding: "11px", marginTop: 4, fontSize: 14 }}
-          onClick={handleLogin}
-        >
-          Entrar
-        </button>
-
-        <div style={{ marginTop: 20, padding: "12px 14px", background: "rgba(56,189,248,.04)", border: "1px solid rgba(56,189,248,.1)", borderRadius: 8, fontSize: 12, color: "#2a4a6a" }}>
-          Demo: <span style={{ fontFamily: "JetBrains Mono, monospace", color: "#38bdf8" }}>admin</span>
-          {" / "}
-          <span style={{ fontFamily: "JetBrains Mono, monospace", color: "#38bdf8" }}>admin123</span>
         </div>
       </div>
 
-      <div style={{ marginTop: 28, fontSize: 11, color: "#0f2035" }}>
-        Embraer Group — Aerocode v1.0.0
+      {/* RIGHT */}
+      <div className="ac-right">
+        <div className="ac-card">
+          <div className="ac-title">L O G I N</div>
+
+          <div className="ac-field">
+            <svg className="ac-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Usuário"
+              value={username}
+              onChange={e => { setUsername(e.target.value); setErr(""); }}
+              onKeyDown={handleKey}
+            />
+          </div>
+
+          <div className="ac-field">
+            <svg className="ac-field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <rect x="5" y="11" width="14" height="10" rx="2" />
+              <path d="M8 11V7a4 4 0 018 0v4" />
+            </svg>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Senha"
+              value={password}
+              onChange={e => { setPassword(e.target.value); setErr(""); }}
+              onKeyDown={handleKey}
+            />
+            <button
+              className="ac-toggle-pw"
+              onClick={() => setShowPassword(p => !p)}
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+            >
+              <EyeIcon crossed={showPassword} />
+            </button>
+          </div>
+
+          {err && <div className="ac-error">{err}</div>}
+
+          <div className="ac-forgot"><a href="#">Esqueceu Senha?</a></div>
+
+          <button className="ac-btn" onClick={handleLogin}>Entrar</button>
+
+          <div className="ac-hint">
+            Demo: <code>admin</code> / <code>admin123</code>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,21 +1,9 @@
 import { useState } from "react";
 import {
-  type Peca,
-  type Aeronave,
-  TIPO_PECA,
-  STATUS_PECA,
-  BADGE_CONFIG,
-  Badge,
-  Modal,
-  FormRow,
-  Field,
-  ModalFooter,
-  CARD_STYLE,
-  CARD_HDR,
-  CARD_TTL,
-  TH_STYLE,
-  TD_STYLE,
-  MONO_CODE,
+  type Peca, type Aeronave,
+  TIPO_PECA, STATUS_PECA, BADGE_CONFIG,
+  Badge, Modal, FormRow, Field, ModalFooter,
+  CARD_STYLE, CARD_HDR, CARD_TTL, TH_STYLE, TD_STYLE, MONO_CODE,
 } from "../enums/enum";
 
 interface PecasPageProps {
@@ -24,13 +12,7 @@ interface PecasPageProps {
   aeronaves: Aeronave[];
 }
 
-interface PecaForm {
-  aeronave: string;
-  nome: string;
-  tipo: string;
-  fornecedor: string;
-  status: string;
-}
+interface PecaForm { aeronave: string; nome: string; tipo: string; fornecedor: string; status: string; }
 
 export function PecasPage({ pecas, setPecas, aeronaves }: PecasPageProps) {
   const [createOpen,   setCreateOpen]   = useState(false);
@@ -70,25 +52,24 @@ export function PecasPage({ pecas, setPecas, aeronaves }: PecasPageProps) {
           </thead>
           <tbody>
             {pecas.map((p, i) => (
-              <tr key={p.id} className="row-hover" style={{ background: i % 2 === 0 ? "transparent" : "rgba(5,10,18,.5)" }}>
+              <tr key={p.id} className="row-hover" style={{ background: i % 2 === 0 ? "transparent" : "rgba(43,122,145,.03)" }}>
                 <td style={TD_STYLE}><span style={MONO_CODE}>{p.aeronave}</span></td>
                 <td style={{ ...TD_STYLE, fontWeight: 500 }}>{p.nome}</td>
                 <td style={TD_STYLE}><Badge value={p.tipo} /></td>
-                <td style={{ ...TD_STYLE, color: "#64748b" }}>{p.fornecedor}</td>
+                <td style={{ ...TD_STYLE, color: "#5a8496" }}>{p.fornecedor}</td>
                 <td style={TD_STYLE}><Badge value={p.status} /></td>
                 <td style={TD_STYLE}>
-                  <button className="btn-amber" onClick={() => setStatusTarget(p)}>↺ Atualizar Status</button>
+                  <button className="btn-amber" onClick={() => setStatusTarget(p)}>↺ Status</button>
                 </td>
               </tr>
             ))}
             {pecas.length === 0 && (
-              <tr><td colSpan={6} style={{ ...TD_STYLE, textAlign: "center", color: "#1e3a5f", padding: "36px 0" }}>Nenhuma peça cadastrada</td></tr>
+              <tr><td colSpan={6} style={{ ...TD_STYLE, textAlign: "center", color: "#a0bec8", padding: "36px 0" }}>Nenhuma peça cadastrada</td></tr>
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Modal: nova peça */}
       {createOpen && (
         <Modal title="Nova Peça / Componente" onClose={() => setCreateOpen(false)}>
           <Field label="Aeronave associada">
@@ -97,7 +78,7 @@ export function PecasPage({ pecas, setPecas, aeronaves }: PecasPageProps) {
             </select>
           </Field>
           <Field label="Nome da peça">
-            <input value={form.nome} onChange={upd("nome")} placeholder="Motor Pratt & Whitney GTF" />
+            <input value={form.nome} onChange={upd("nome")} placeholder="Motor Turbofan TF-900" />
           </Field>
           <FormRow>
             <Field label="Tipo">
@@ -108,18 +89,17 @@ export function PecasPage({ pecas, setPecas, aeronaves }: PecasPageProps) {
             </Field>
           </FormRow>
           <Field label="Fornecedor">
-            <input value={form.fornecedor} onChange={upd("fornecedor")} placeholder="Pratt & Whitney" />
+            <input value={form.fornecedor} onChange={upd("fornecedor")} placeholder="MotorTech International" />
           </Field>
           <ModalFooter onClose={() => setCreateOpen(false)} onConfirm={handleSave} />
         </Modal>
       )}
 
-      {/* Modal: atualizar status */}
       {statusTarget && (
         <Modal title="Atualizar Status da Peça" onClose={() => setStatusTarget(null)} width={420}>
           <div style={{ marginBottom: 16 }}>
-            <div style={{ fontSize: 13.5, color: "#94a3b8", marginBottom: 6 }}>{statusTarget.nome}</div>
-            <div style={{ fontSize: 12, color: "#3d5a78" }}>Status atual: <Badge value={statusTarget.status} /></div>
+            <div style={{ fontSize: 13.5, fontWeight: 500, color: "#1a3a48", marginBottom: 6 }}>{statusTarget.nome}</div>
+            <div style={{ fontSize: 12.5, color: "#5a8496" }}>Status atual: <Badge value={statusTarget.status} /></div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {STATUS_PECA.map(s => (
@@ -127,12 +107,12 @@ export function PecasPage({ pecas, setPecas, aeronaves }: PecasPageProps) {
                 key={s}
                 onClick={() => applyStatus(s)}
                 style={{
-                  background: s === statusTarget.status ? "rgba(56,189,248,.08)" : "rgba(255,255,255,.02)",
-                  border: s === statusTarget.status ? "1px solid #38bdf8" : "1px solid #1a3050",
+                  background: s === statusTarget.status ? "#eef7fa" : "#f4f9fb",
+                  border: s === statusTarget.status ? "1.5px solid #2B7A91" : "1px solid #cde0e8",
                   borderRadius: 8, padding: "11px 16px", cursor: "pointer",
                   display: "flex", alignItems: "center", justifyContent: "space-between",
-                  color: s === statusTarget.status ? "#38bdf8" : "#64748b",
-                  fontSize: 13.5, fontFamily: "DM Sans, sans-serif", transition: "all .12s",
+                  fontFamily: "DM Sans, sans-serif", transition: "all .12s",
+                  color: s === statusTarget.status ? "#1d6a82" : "#5a8496", fontSize: 13.5,
                 }}
               >
                 <span>{BADGE_CONFIG[s]?.label ?? s}</span>

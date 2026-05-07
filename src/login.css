@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@400;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: 'DM Sans', sans-serif; overflow: hidden; }
+
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+.ac-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ── Left panel ───────────────────────────────────────────────────────────── */
+.ac-left {
+  width: 45%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #ffffff; /* Fundo branco garantido */
+}
+
+.ac-wave {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.ac-wave svg { width: 100%; height: 100%; }
+
+.ac-logo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUp .8s ease both;
+}
+
+.ac-logo-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1d5c72;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+/* Corrigido para não ficar invisível no fundo branco */
+.ac-logo-text span { 
+  color: #1d5c72; 
+  font-weight: 500; /* Levemente mais fino para dar contraste, como na imagem 1 */
+}
+
+/* ── Right panel ──────────────────────────────────────────────────────────── */
+.ac-right {
+  width: 55%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f9fb;
+}
+
+.ac-card {
+  width: 360px;
+  background: #ffffff;
+  border: 1px solid #cde0e8;
+  border-radius: 16px;
+  padding: 36px 32px;
+  box-shadow: 0 8px 40px rgba(43,122,145,.10);
+  animation: fadeUp .9s .12s ease both;
+}
+
+/* ── Title ────────────────────────────────────────────────────────────────── */
+.ac-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.38em;
+  color: #1d5c72;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* Fields */
+.ac-field {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.ac-field-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8ab0bc;
+  width: 17px;
+  height: 17px;
+  pointer-events: none;
+}
+
+.ac-field input {
+  width: 100%;
+  border: 1.5px solid #cde0e8;
+  border-radius: 9px;
+  padding: 10px 38px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #1a3a48;
+  background: #f4f9fb;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.ac-field input::placeholder { color: #a0bec8; }
+
+.ac-field input:focus {
+  border-color: #2B7A91;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(43,122,145,.12);
+}
+
+.ac-toggle-pw {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8ab0bc;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color .2s;
+}
+.ac-toggle-pw:hover { color: #2B7A91; }
+
+/* ── Error ────────────────────────────────────────────────────────────────── */
+.ac-error {
+  background: #fde8e8;
+  border: 1px solid #f0a0a0;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  color: #b91c1c;
+  margin-bottom: 12px;
+}
+
+/* ── Forgot ───────────────────────────────────────────────────────────────── */
+.ac-forgot {
+  text-align: right;
+  margin-bottom: 18px;
+}
+
+.ac-forgot a {
+  font-size: 12px;
+  color: #5a9ab0;
+  text-decoration: none;
+  transition: color .2s;
+}
+.ac-forgot a:hover { color: #2B7A91; text-decoration: underline; }
+
+/* ── Button ───────────────────────────────────────────────────────────────── */
+.ac-btn {
+  width: 100%;
+  padding: 12px;
+  background: #2B7A91;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(43,122,145,.3);
+  transition: background .2s, transform .15s, box-shadow .2s;
+}
+.ac-btn:hover {
+  background: #1d6278;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(43,122,145,.4);
+}
+.ac-btn:active { transform: translateY(0); }
+
+/* ── Hint ─────────────────────────────────────────────────────────────────── */
+.ac-hint {
+  margin-top: 18px;
+  padding: 10px 12px;
+  background: #eef7fa;
+  border: 1px solid #cde0e8;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #5a9ab0;
+  text-align: center;
+}
+.ac-hint code {
+  font-family: 'JetBrains Mono', monospace;
+  color: #2B7A91;
+  font-weight: 600;
+  background: rgba(43,122,145,.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
