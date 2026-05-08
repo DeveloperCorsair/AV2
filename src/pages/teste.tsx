@@ -16,6 +16,7 @@ interface TesteForm { aeronave: string; tipo: string; resultado: string; }
 
 export function TestesPage({ testes, setTestes, aeronaves }: TestesPageProps) {
   const [createOpen, setCreateOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<Teste | null>(null);
 
   const blank: TesteForm = { aeronave: aeronaves[0]?.codigo ?? "", tipo: "ELETRICO", resultado: "APROVADO" };
   const [form, setForm] = useState<TesteForm>(blank);
@@ -23,15 +24,41 @@ export function TestesPage({ testes, setTestes, aeronaves }: TestesPageProps) {
   const upd = (k: keyof TesteForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm(p => ({ ...p, [k]: e.target.value }));
 
+  const openCreate = () => { setForm(blank); setCreateOpen(true); };
+  const openEdit   = (t: Teste) => { setForm({ aeronave: t.aeronave, tipo: t.tipo, resultado: t.resultado }); setEditTarget(t); };
+
   const handleSave = () => {
-    setTestes(prev => [...prev, { ...form, id: Date.now() }]);
-    setForm(blank);
-    setCreateOpen(false);
+    if (editTarget) {
+      setTestes(prev => prev.map(t => t.id === editTarget.id ? { ...t, ...form } : t));
+      setEditTarget(null);
+    } else {
+      setTestes(prev => [...prev, { ...form, id: Date.now() }]);
+      setForm(blank);
+      setCreateOpen(false);
+    }
   };
 
   const aprovados  = testes.filter(t => t.resultado === "APROVADO").length;
   const reprovados = testes.filter(t => t.resultado === "REPROVADO").length;
   const taxa       = testes.length ? Math.round((aprovados / testes.length) * 100) : 0;
+
+  const TesteForm = () => (
+    <>
+      <Field label="Aeronave">
+        <select value={form.aeronave} onChange={upd("aeronave")}>
+          {aeronaves.map(a => <option key={a.codigo} value={a.codigo}>{a.codigo} — {a.modelo}</option>)}
+        </select>
+      </Field>
+      <FormRow>
+        <Field label="Tipo de Teste">
+          <select value={form.tipo} onChange={upd("tipo")}>{TIPO_TESTE.map(t => <option key={t}>{t}</option>)}</select>
+        </Field>
+        <Field label="Resultado">
+          <select value={form.resultado} onChange={upd("resultado")}>{RESULTADO_TESTE.map(t => <option key={t}>{t}</option>)}</select>
+        </Field>
+      </FormRow>
+    </>
+  );
 
   return (
     <div>
@@ -65,11 +92,11 @@ export function TestesPage({ testes, setTestes, aeronaves }: TestesPageProps) {
       <div style={CARD_STYLE}>
         <div style={CARD_HDR}>
           <span style={CARD_TTL}>Registro de Testes</span>
-          <button className="btn-primary" onClick={() => { setForm(blank); setCreateOpen(true); }}>+ Registrar Teste</button>
+          <button className="btn-primary" onClick={openCreate}>+ Registrar Teste</button>
         </div>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
-            <tr>{["Aeronave", "Tipo de Teste", "Resultado"].map(h =>
+            <tr>{["Aeronave", "Tipo de Teste", "Resultado", "Ações"].map(h =>
               <th key={h} style={TH_STYLE}>{h}</th>
             )}</tr>
           </thead>
@@ -79,31 +106,31 @@ export function TestesPage({ testes, setTestes, aeronaves }: TestesPageProps) {
                 <td style={TD_STYLE}><span style={MONO_CODE}>{t.aeronave}</span></td>
                 <td style={TD_STYLE}><Badge value={t.tipo} /></td>
                 <td style={TD_STYLE}><Badge value={t.resultado} /></td>
+                <td style={TD_STYLE}>
+                  <button className="btn-ghost" onClick={() => openEdit(t)}>✎ Editar</button>
+                </td>
               </tr>
             ))}
             {testes.length === 0 && (
-              <tr><td colSpan={3} style={{ ...TD_STYLE, textAlign: "center", color: "#a0bec8", padding: "36px 0" }}>Nenhum teste registrado</td></tr>
+              <tr><td colSpan={4} style={{ ...TD_STYLE, textAlign: "center", color: "#a0bec8", padding: "36px 0" }}>Nenhum teste registrado</td></tr>
             )}
           </tbody>
         </table>
       </div>
 
+      {/* Modal: novo teste */}
       {createOpen && (
         <Modal title="Registrar Teste" onClose={() => setCreateOpen(false)}>
-          <Field label="Aeronave">
-            <select value={form.aeronave} onChange={upd("aeronave")}>
-              {aeronaves.map(a => <option key={a.codigo} value={a.codigo}>{a.codigo} — {a.modelo}</option>)}
-            </select>
-          </Field>
-          <FormRow>
-            <Field label="Tipo de Teste">
-              <select value={form.tipo} onChange={upd("tipo")}>{TIPO_TESTE.map(t => <option key={t}>{t}</option>)}</select>
-            </Field>
-            <Field label="Resultado">
-              <select value={form.resultado} onChange={upd("resultado")}>{RESULTADO_TESTE.map(t => <option key={t}>{t}</option>)}</select>
-            </Field>
-          </FormRow>
+          <TesteForm />
           <ModalFooter onClose={() => setCreateOpen(false)} onConfirm={handleSave} />
+        </Modal>
+      )}
+
+      {/* Modal: editar teste */}
+      {editTarget && (
+        <Modal title="Editar Teste" onClose={() => setEditTarget(null)}>
+          <TesteForm />
+          <ModalFooter onClose={() => setEditTarget(null)} onConfirm={handleSave} confirmLabel="Atualizar Teste" />
         </Modal>
       )}
     </div>
